@@ -39,6 +39,7 @@ public class MediaUtil {
             mp = new MediaPlayer();
             playerMap.put(name, mp);
         }
+        //executorService.execute(new MediaThread(name, streamType, path, uri, block, interrupt));
         return this;
     }
 
@@ -100,14 +101,31 @@ public class MediaUtil {
 
     private void play(String name, int streamType, String path, Uri uri, boolean block,
             boolean interrupt) {
+
         synchronized (MediaUtil.class) {
-            if (playerMap.size() > 5) {
+
+            if (playerMap.size() > 5)
                 return;
-            }
+
             if (TextUtils.isEmpty(name))
                 return;
-            playerMap.put(name, new MediaPlayer());
-            //executorService.execute(new MediaThread(name, streamType, path, uri, block, interrupt));
+
+            MediaPlayer player = new MediaPlayer();
+            playerMap.put(name, player);
+
+            if (interrupt) {
+                if (playerMap.size() > 0){
+
+                   for (MediaPlayer media:playerMap.values()){
+                       media.release();
+
+                       if (media.isPlaying() && interruptCallBack != null){
+                           interruptCallBack.onInterrupt();
+                       }
+                   }
+                }
+            }
+
 
 
 
