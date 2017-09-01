@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="issues">
+    <option name="index">
+      <map>
+        <entry key="/Dummy.txt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="/fragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/ty/mymusictest/MainActivity.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/ty/mymusictest/MediaUtil.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../Robot2s/app/src/main/java/com/flyingwings/cn/robot2s/app/chatapp/ChatAppConstant.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../Robot2s/app/src/main/java/com/flyingwings/cn/robot2s/app/chatapp/tts/TTSService.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../Robot2s/app/src/main/java/com/flyingwings/cn/robot2s/app/musicapp/MusicServer.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../Robot2s/app/src/main/java/com/flyingwings/cn/robot2s/app/radiofmapp/xmlyapp/XmlyApp.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../Robot2s/app/src/main/java/com/flyingwings/cn/robot2s/app/sysupdateapp/SystemUpdateApp.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../Robot2s/app/src/main/java/com/flyingwings/cn/robot2s/robot/RobotApp.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../Robot2s/app/src/main/java/com/flyingwings/cn/robot2s/robot/RobotVersion.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../Robot2s/app/src/main/java/com/flyingwings/cn/robot2s/ui/MainActivity.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../Robot2s/app/src/main/java/com/flyingwings/cn/robot2s/util/MediaUtil.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
