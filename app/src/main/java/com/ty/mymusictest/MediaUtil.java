@@ -1,10 +1,15 @@
 
 package com.ty.mymusictest;
 
+import android.content.Context;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import java.io.FileDescriptor;
+import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -24,6 +29,9 @@ public class MediaUtil {
 
     MediaPlayer mp;
 
+    boolean isPause = false;
+
+    private Context context;
     // 创建MediaPlayer单例
     private static MediaUtil instance = new MediaUtil();
 
@@ -41,6 +49,10 @@ public class MediaUtil {
         }
         //executorService.execute(new MediaThread(name, streamType, path, uri, block, interrupt));
         return this;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 
 /*    private class MediaThread extends Thread {
@@ -99,8 +111,8 @@ public class MediaUtil {
         play(name, streamType, path, null, block, interrupt);
     }
 
-    private void play(String name, int streamType, String path, Uri uri, boolean block,
-            boolean interrupt) {
+    private void play(final String name, int streamType, String path, Uri uri, boolean block,
+                      boolean interrupt) {
 
         synchronized (MediaUtil.class) {
 
@@ -110,34 +122,87 @@ public class MediaUtil {
             if (TextUtils.isEmpty(name))
                 return;
 
-            MediaPlayer player = new MediaPlayer();
-            playerMap.put(name, player);
+            if (isPause) {
+                isPause = false;
+                playerMap.get(name).start();
+                return;
+            }
 
             if (interrupt) {
-                if (playerMap.size() > 0){
+                if (playerMap.size() > 0) {
+                    // 停止其他所有播放
+                    for (MediaPlayer media : playerMap.values()) {
 
-                   for (MediaPlayer media:playerMap.values()){
-                       media.release();
+                        if (media.isPlaying() && interruptCallBack != null) {
+                            media.stop();
+                            interruptCallBack.onInterrupt();
+                        }
+                        media.release();
 
-                       if (media.isPlaying() && interruptCallBack != null){
-                           interruptCallBack.onInterrupt();
-                       }
-                   }
+                    }
+                    // 从Map移除
+                    for (String n : playerMap.keySet()) {
+                        playerMap.remove(n);
+                    }
                 }
             }
 
+            final MediaPlayer player = new MediaPlayer();
+            playerMap.put(name, player);
 
+            AssetManager assetManager = context.getAssets();
+            AssetFileDescriptor fd = null;
 
+            try {
+                fd = assetManager.openFd(path);
+                player.setDataSource(fd.getFileDescriptor(), fd.getStartOffset(), fd.getLength());
+                player.setAudioStreamType(streamType);
+                player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mediaPlayer) {
+                        player.release();
+                        playerMap.remove(name);
+                        if (completeCallBack != null) {
+                            completeCallBack.onComplete();
+                        }
+                    }
+                });
+                player.prepare();
+                player.start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    fd.close();
+                } catch (Exception e) {
+
+                }
+            }
+
+            if (block) {
+                try {
+                    Thread.sleep(player.getDuration()+200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
 
         }
     }
 
-    public void pause(){
-
+    public void pause(String name) {
+        MediaPlayer mediaPlayer = playerMap.get(name);
+        if (mediaPlayer != null && mediaPlayer.isPlaying()){
+            isPause = true;
+            mediaPlayer.pause();
+        }
     }
 
-    public void stop(){
-
+    public void stop(String name) {
+        MediaPlayer mediaPlayer = playerMap.get(name);
+        if (mediaPlayer != null && mediaPlayer.isPlaying()){
+            mediaPlayer.stop();
+        }
     }
 
 
